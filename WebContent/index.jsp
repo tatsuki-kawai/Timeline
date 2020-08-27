@@ -7,6 +7,7 @@
 <title>Timeline ログイン</title>
 </head>
 <body>
+<h1>タイムラインへようこそ</h1>
 <form action="/TimeLine/Login" method="post">
 <p>ユーザー名：<input type="text" name="name"></p>
 <p>パスワード：<input type="text" name="pass"></p>

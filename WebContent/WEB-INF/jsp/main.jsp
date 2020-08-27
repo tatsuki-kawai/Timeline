@@ -12,6 +12,7 @@ User user = (User) session.getAttribute("User");
 </head>
 <body>
 <p>ユーザー名:<%= user.getName() %></p>
+<a href="/TimeLine/Logout">ログアウト</a>
 <form action="/TimeLine/Main" method="post">
 <p>いつ？:<input type="text" name="when"></p>
 <p>なにをしました？:<input type="text" name="what"></p>
