@@ -23,25 +23,26 @@ import model.User;
 public class Main extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public Main() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public Main() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 
 		//ユーザーの情報を取得
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("User");
 
-		if(user != null) {
+		if (user != null) {
 			//予定表をセッションスコープに保存する
 			List<Action> actions = new ArrayList<Action>();
 			session.setAttribute("Actions", actions);
@@ -49,7 +50,7 @@ public class Main extends HttpServlet {
 			//フォワードする
 			RequestDispatcher dispather = request.getRequestDispatcher("/WEB-INF/jsp/main.jsp");
 			dispather.forward(request, response);
-		}else {
+		} else {
 			//ログイン画面にリダイレクトする
 			response.sendRedirect("/TimeLine/");
 		}
@@ -58,7 +59,8 @@ public class Main extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 
 		//リクエストパラメーターの取得
@@ -66,20 +68,33 @@ public class Main extends HttpServlet {
 		String when = request.getParameter("when");
 		String what = request.getParameter("what");
 
-		//行動の生成
-		Action action = new Action(when, what);
-
-		//予定表をセッションスコープから取得
 		HttpSession session = request.getSession();
-		List<Action> actions = (List<Action>)session.getAttribute("Actions");
 
-		//予定表に行動を登録
-		PostAction postAction = new PostAction();
-		postAction.execute(actions, action);
+	    if(when != null && when.length() != 0 && what != null && what.length() != 0) {
 
-		//フォワード
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main.jsp");
-		dispatcher.forward(request, response);
+			//行動の生成
+			Action action = new Action(when, what);
+
+			//予定表をセッションスコープから取得
+			List<Action> actions = (List<Action>) session.getAttribute("Actions");
+
+			//予定表に行動を登録
+			PostAction postAction = new PostAction();
+			postAction.execute(actions, action);
+
+			//フォワード
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main.jsp");
+			dispatcher.forward(request, response);
+
+	    }else {
+			String msg = "エラー:入力が正しくありません！";
+			session.setAttribute("Msg", msg);
+
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main.jsp");
+			dispatcher.forward(request, response);
+
+			session.removeAttribute("Msg");
+	    }
 	}
 
 }

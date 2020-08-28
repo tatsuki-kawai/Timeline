@@ -4,6 +4,7 @@
 <%
 User user = (User) session.getAttribute("User");
 List<Action> actions = (List<Action>) session.getAttribute("Actions");
+String msg = (String) session.getAttribute("Msg");
 %>
 <!DOCTYPE html>
 <html>
@@ -19,6 +20,9 @@ List<Action> actions = (List<Action>) session.getAttribute("Actions");
 <p>なにをしました？(ex.バイト):<input type="text" name="what"></p>
 <input type="submit" value="決定">
 </form>
+<% if(msg != null){ %>
+  <p><%= msg %></p>
+<% }%>
 <%for(Action action : actions){ %>
  <p><%= action.getWhen() %>～ <%= action.getWhat()%></p>
 <%} %>
